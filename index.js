@@ -1,26 +1,20 @@
 require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const { exec } = require('child_process')
+const util = require('minecraft-server-util')
 
 const {
   DISCORD_BOT_TOKEN,
-  MC_SERVER_ADDRESS,
+  MC_SERVER_ADDRESS
 } = process.env;
 
 async function checkServerStatus() {
-    return new Promise((resolve, reject) => {
-        exec(`ping -n 3 ${MC_SERVER_ADDRESS}`, (error, stdout, stderr) => {
-            if (error) {
-                console.log(error)
-                resolve(false);
-            } else {
-                resolve(true);
-            }
-        })
-    })
+  return new Promise((resolve, reject) => {
+    util.status(MC_SERVER_ADDRESS)
+    .then(() => resolve(true))
+    .catch(() => resolve(false));
+});
 }
-
 
 function updateBotStatus(serverOnline) {
     if (serverOnline) {
@@ -43,7 +37,7 @@ client.on('ready', async () => {
         const isOnline = await checkServerStatus()
         console.log(isOnline)
         updateBotStatus(isOnline);
-    }, 10000); // Check every 5 minutes (adjust as needed)
+    }, 1000) // 10 seconds
 });
 
 client.login(DISCORD_BOT_TOKEN)
