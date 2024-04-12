@@ -1,19 +1,31 @@
 require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const util = require('minecraft-server-util')
+const mcs = require('node-mcstatus')
 
 const {
   DISCORD_BOT_TOKEN,
-  MC_SERVER_ADDRESS
+  MC_SERVER_ADDRESS,
+  MC_SERVER_PORT
 } = process.env;
 
+const options = {
+    query: true
+}
+
 async function checkServerStatus() {
-  return new Promise((resolve, reject) => {
-    util.status(MC_SERVER_ADDRESS)
-    .then(() => resolve(true))
-    .catch(() => resolve(false));
-});
+    return new Promise((resolve, reject) => {
+        mcs.statusJava(MC_SERVER_ADDRESS, MC_SERVER_PORT, options)
+        .then((result) => {
+            console.log(result)
+            if (!result.online) resolve(false)
+            resolve(true)
+        })
+        .catch((err) => {
+            console.log(err)
+            resolve(false)
+        })
+    })
 }
 
 function updateBotStatus(serverOnline) {
@@ -21,8 +33,9 @@ function updateBotStatus(serverOnline) {
         client.user.setStatus('online');
         client.user.setActivity('Server: Online', { type: 'WATCHING' });
     } else {
-        client.user.setActivity('Server: Offline', { type: 'WATCHING' });
         client.user.setStatus('dnd');
+        client.user.setActivity('Server: Offline', { type: 'WATCHING' });
+        
     }
 }
 
