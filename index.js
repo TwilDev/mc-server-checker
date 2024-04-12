@@ -15,6 +15,7 @@ const options = {
 }
 
 const app = express()
+const PORT = process.env.PORT || 4000
 
 async function checkServerStatus() {
     return new Promise((resolve, reject) => {
@@ -59,9 +60,10 @@ client.on('ready', async () => {
 client.login(DISCORD_BOT_TOKEN)
 
 app.get('/ping', (req, res) => {
+    console.log('ping')
     res.send('pong')
 })
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000')
+app.listen(PORT, () => {
+    console.log(`Server is running on port 4000`)
 })
