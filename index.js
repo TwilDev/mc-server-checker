@@ -38,10 +38,10 @@ async function checkServerStatus() {
 function updateBotStatus(serverOnline) {
     if (serverOnline) {
         client.user.setStatus('online')
-        client.user.setActivity('Server: Online')
+        client.user.setActivity('Server: Online', { type: 'WATCHING'})
     } else {
-        client.user.setStatus('dnd')
-        client.user.setActivity('Server: Offline')
+        client.user.setStatus('invisible')
+        client.user.setActivity('Server: Offline', { type: 'WATCHING'})
         
     }
 }
