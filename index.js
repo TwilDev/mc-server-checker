@@ -2,6 +2,7 @@ require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const mcs = require('node-mcstatus')
+const express = require('express')
 
 const {
   DISCORD_BOT_TOKEN,
@@ -12,6 +13,8 @@ const {
 const options = {
     query: true
 }
+
+const app = express()
 
 async function checkServerStatus() {
     return new Promise((resolve, reject) => {
@@ -54,3 +57,11 @@ client.on('ready', async () => {
 });
 
 client.login(DISCORD_BOT_TOKEN)
+
+app.get('/ping', (req, res) => {
+    res.send('pong')
+})
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000')
+})
