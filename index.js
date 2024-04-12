@@ -50,7 +50,7 @@ client.on('ready', async () => {
         const isOnline = await checkServerStatus()
         console.log(isOnline)
         updateBotStatus(isOnline);
-    }, 1000) // 10 seconds
+    }, 2000000) // 20 minutes 
 });
 
 client.login(DISCORD_BOT_TOKEN)
